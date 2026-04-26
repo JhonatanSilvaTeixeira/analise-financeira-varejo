@@ -84,10 +84,10 @@ Os dados utilizados são públicos e foram extraídos da CVM, incluindo:
 
 Por limitações de tamanho e boas práticas de versionamento, os arquivos brutos não estão incluídos neste repositório.
 
-### 🔗 Fonte dos dados:
+### Fonte dos dados:
 - CVM – Dados Abertos: https://www.gov.br/cvm/pt-br/assuntos/dados-abertos
 
-### ⚙️ Como reproduzir o projeto:
+### Como reproduzir o projeto:
 1. Baixar os arquivos diretamente da fonte oficial da CVM
 2. Inserir na pasta `/data_raw`
 3. Executar os scripts SQL na ordem definida na pasta `/sql`
