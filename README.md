@@ -199,14 +199,6 @@ O objetivo não é explicar o evento em si, mas avaliar se os dados já indicava
 
 ---
 
-## Próximos passos
-
-* construção de dashboard para visualização
-* inclusão de novas empresas
-* expansão dos indicadores analisados
-
----
-
 ## Documentação
 
 Mais detalhes podem ser encontrados em:
