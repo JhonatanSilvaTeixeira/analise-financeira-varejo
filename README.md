@@ -1,24 +1,20 @@
 # Análise Financeira de Varejistas Brasileiras (2021–2023)
 
-## Visão Geral
+## 1. Contexto
 
-Este projeto foi desenvolvido com o objetivo de analisar o desempenho financeiro de grandes varejistas brasileiras a partir de dados públicos da CVM. Mais do que apenas organizar números, a ideia foi entender o que esses dados mostram sobre o comportamento das empresas ao longo do tempo.
+Em 2023, o mercado brasileiro foi impactado pelo caso da Americanas S.A., envolvendo inconsistências contábeis relevantes e deterioração financeira significativa.
 
-A análise foi estruturada em três dimensões principais:
-
-* desempenho operacional (receita, lucro e crescimento)
-* geração de caixa (se o lucro se converte em dinheiro de fato)
-* estrutura de capital (nível de endividamento e risco)
-
-Além disso, o projeto também buscou responder uma pergunta mais específica:
-
-**Seria possível identificar sinais de deterioração financeira antes de eventos relevantes?**
-
-Para isso, foi dado um foco maior ao caso da Americanas, analisando se os indicadores já apresentavam sinais de alerta antes da crise enfrentada pela companhia.
+Este projeto investiga se indicadores financeiros públicos seriam capazes de sinalizar deterioração financeira antes de eventos críticos, utilizando dados de empresas do setor varejista.
 
 ---
 
-## Empresas Analisadas
+## 2. Objetivo
+
+Analisar o desempenho financeiro de grandes varejistas brasileiras, com foco na identificação de sinais de deterioração a partir de indicadores contábeis e financeiros.
+
+---
+
+## 3. Empresas Analisadas
 
 * Americanas S.A.
 * Grupo Casas Bahia S.A.
@@ -27,20 +23,95 @@ Para isso, foi dado um foco maior ao caso da Americanas, analisando se os indica
 
 ---
 
-## Estrutura do Projeto
+## 4. Base de Dados
 
-Os dados foram organizados seguindo uma lógica de pipeline:
+Os dados utilizados são públicos e foram extraídos da CVM (Comissão de Valores Mobiliários), incluindo:
 
-**RAW → TRATAMENTO → CONSOLIDAÇÃO → ANÁLISE**
+* Demonstração do Resultado (DRE)
+* Demonstração do Fluxo de Caixa (DFC)
+* Balanço Patrimonial
 
-### Organização das pastas
+Devido ao volume dos arquivos, os dados brutos não estão versionados neste repositório.
+
+Para reprodução do projeto, os dados podem ser obtidos diretamente na fonte oficial:
+
+[https://www.gov.br/cvm/pt-br/assuntos/dados-abertos](https://dados.cvm.gov.br/dataset/cia_aberta-doc-dfp)
+
+---
+
+## 5. Metodologia
+
+A análise foi conduzida utilizando SQL em ambiente PostgreSQL.
+
+O projeto segue uma estrutura em pipeline:
+
+RAW → TRATAMENTO → CONSOLIDAÇÃO → ANÁLISE
+
+### Principais etapas
+
+* Tratamento e padronização dos dados
+* Construção de indicadores financeiros
+* Consolidação das informações em tabelas analíticas
+* Análise comparativa entre empresas e ao longo do tempo
+
+---
+
+## 6. Indicadores Analisados
+
+### Performance
+
+* Receita líquida
+* Lucro líquido
+* Margem líquida
+* Crescimento
+
+### Qualidade do lucro
+
+* Relação entre caixa operacional e lucro líquido
+
+### Estrutura e risco
+
+* Relação entre dívida e patrimônio
+* Evolução do endividamento
+
+---
+
+## 7. Principais Análises
+
+O projeto busca responder às seguintes questões:
+
+* As empresas apresentam crescimento consistente?
+* O lucro é acompanhado por geração de caixa?
+* Existe dependência de endividamento?
+* Há sinais de deterioração ao longo do tempo?
+
+Adicionalmente:
+
+* Seria possível identificar sinais de alerta antes de uma crise financeira?
+
+---
+
+## 8. Caso de Estudo: Americanas S.A.
+
+Foi realizada uma análise específica considerando:
+
+* Evolução do lucro
+* Comportamento do caixa operacional
+* Deterioração do patrimônio líquido
+* Aumento do risco financeiro
+
+O objetivo é avaliar se os dados indicavam desalinhamentos antes do evento se tornar evidente.
+
+---
+
+## 9. Estrutura do Projeto
 
 ```
 projeto/
 │
 ├── data/
-│   └── raw/    # Dados brutos baixados no site da CVM (CSV)
-│   └── processed/    # Dados tratados/exportados (CSV)
+│   ├── raw/
+│   └── processed/
 │
 ├── sql/
 │   ├── 01_create_tables.sql
@@ -52,164 +123,32 @@ projeto/
 │
 ├── docs/
 │   ├── analises.md
-│   ├── dicionario_dados.md
-│   └── metodologia.md
+│   ├── metodologia.md
+│   └── dicionario_dados.md
 │
 └── README.md
 ```
-   
----
-
-## Importação
-
-Os dados brutos (raw) foram importados diretamente no banco de dados utilizando a ferramenta de Data Transfer do DBeaver, sem utilização de scripts SQL para ingestão.
-
-### Configurações utilizadas:
-
-* Encoding: Windows-1252
-* Delimitador: ;
-* Arquivos com cabeçalho
-
-Essa abordagem foi adotada para simplificar a etapa de ingestão e manter o foco no tratamento e na análise dos dados.
 
 ---
 
-## Fonte de Dados
-
-Os dados utilizados são públicos e foram extraídos da CVM, incluindo:
-
-* Demonstração do Resultado (DRE)
-* Demonstração do Fluxo de Caixa (DFC)
-* Balanço Patrimonial (Ativo e Passivo)
-
-Por limitações de tamanho e boas práticas de versionamento, os arquivos brutos não estão incluídos neste repositório.
-
-### Fonte dos dados:
-- CVM – Dados Abertos: [https://www.gov.br/cvm/pt-br/assuntos/dados-abertos](https://dados.cvm.gov.br/dataset/cia_aberta-doc-dfp)
-
-### Como reproduzir o projeto:
-1. Baixar os arquivos diretamente da fonte oficial da CVM
-2. Inserir na pasta `/data_raw`
-3. Executar os scripts SQL na ordem definida na pasta `/sql`
-
----
-
-## Como o projeto foi construído
-
-### 1. Tratamento
-
-Os dados brutos foram organizados em views, com alguns cuidados principais:
-
-* filtragem das empresas analisadas
-* união dos anos (2021, 2022 e 2023)
-* identificação das contas relevantes
-* padronização das informações
-
-**Views criadas:**
-
-* dre_tratado
-* dfc_tratado
-* bp_tratado
-
----
-
-### 2. Consolidação
-
-Após o tratamento, os dados foram estruturados em tabelas finais:
-
-* dre_consolidado
-* dfc_consolidado
-* bp_consolidado
-* indicadores_financeiros
-
-Essa etapa transforma os dados em uma base pronta para análise.
-
----
-
-### 3. Camada Analítica
-
-Foi criada uma view chamada **analise_final**, que integra:
-
-* DRE (resultado)
-* DFC (caixa)
-* BP (estrutura)
-
-É nessa camada que os indicadores são calculados e as análises são realizadas.
-
----
-
-## Principais Indicadores
-
-A análise foi organizada em três blocos:
-
-### Performance
-
-* receita líquida
-* lucro líquido
-* margem líquida
-* crescimento ao longo do tempo
-
-### Qualidade do lucro
-
-* relação entre caixa operacional e lucro líquido
-* capacidade de conversão do lucro em caixa
-
-### Estrutura e risco
-
-* relação entre dívida e patrimônio
-* evolução do nível de endividamento
-
----
-
-## O que a análise busca responder
-
-O projeto foi orientado por algumas perguntas principais:
-
-* a empresa está crescendo de forma consistente?
-* o lucro é acompanhado por geração de caixa?
-* existe dependência de dívida para sustentar o crescimento?
-* há sinais de deterioração ao longo do tempo?
-
-De forma mais específica:
-
-* seria possível identificar sinais de alerta antes de uma crise?
-
----
-
-## Análise específica: caso Americanas
-
-O projeto dedica uma atenção especial à Americanas, considerando o contexto recente da companhia.
-
-A análise observa:
-
-* evolução do lucro
-* comportamento do caixa operacional
-* deterioração do patrimônio líquido
-* aumento do risco financeiro
-
-O objetivo não é explicar o evento em si, mas avaliar se os dados já indicavam algum desalinhamento antes dele se tornar evidente.
-
----
-
-## Tecnologias utilizadas
+## 10. Tecnologias Utilizadas
 
 * PostgreSQL
-* DBeaver
 * SQL
+* DBeaver
+* Visual Studio Code
 
 ---
 
-## Documentação
+## 11. Documentação
 
-Mais detalhes podem ser encontrados em:
-
-* docs/dicionario_dados.md
-* docs/metodologia.md
+As análises detalhadas, consultas e explicações completas estão disponíveis na pasta `/docs`.
 
 ---
 
-## Considerações finais
+## 12. Considerações Finais
 
-Este projeto foi desenvolvido com foco em prática e clareza: organizar dados reais, estruturar uma análise consistente e extrair interpretações que façam sentido.
+Este projeto foi desenvolvido com foco na organização de dados financeiros, construção de indicadores e análise crítica de desempenho.
 
-Mais do que calcular indicadores, a proposta foi usar os dados para entender comportamento, identificar padrões e levantar possíveis sinais de risco ao longo do tempo.
+Os resultados sugerem que a identificação de sinais de deterioração financeira depende da análise conjunta de múltiplos indicadores, não sendo evidente quando observados de forma isolada.
+
