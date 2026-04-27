@@ -1,89 +1,113 @@
-# Metodologia do Projeto
+# Metodologia
 
-## Fonte de Dados
+## 1. Fonte de Dados
 
-Os dados foram obtidos a partir da CVM (Comissão de Valores Mobiliários), incluindo:
+Os dados utilizados foram obtidos a partir da CVM (Comissão de Valores Mobiliários), incluindo as seguintes demonstrações financeiras:
 
-- DRE (Demonstração do Resultado)
-- DFC (Fluxo de Caixa)
-- BPA (Ativo)
-- BPP (Passivo)
+- Demonstração do Resultado do Exercício (DRE)  
+- Demonstração do Fluxo de Caixa (DFC)  
+- Balanço Patrimonial (Ativo e Passivo)  
+
+Os dados referem-se ao período de 2021 a 2023.
 
 ---
 
-## Etapas do Projeto
+## 2. Etapas do Projeto
 
-### 1. Importação
+O projeto foi estruturado em etapas sequenciais, seguindo uma lógica de pipeline de dados:
 
-Os dados foram importados via DBeaver (Data Transfer), com as seguintes configurações:
+RAW → TRATAMENTO → CONSOLIDAÇÃO → ANÁLISE
+
+---
+
+## 3. Importação dos Dados
+
+Os dados brutos foram importados para o PostgreSQL utilizando a ferramenta de Data Transfer do DBeaver.
+
+Configurações utilizadas:
 
 - Encoding: Windows-1252  
-- Delimitador: `;`  
-- Header: habilitado  
+- Delimitador: ;  
+- Arquivos com cabeçalho habilitado  
 
 ---
 
-### 2. Tratamento dos Dados
+## 4. Tratamento dos Dados
 
-Foi realizada a padronização e filtragem dos dados:
+Nesta etapa, os dados foram padronizados e preparados para análise.
 
-- Seleção de empresas do setor varejista
-- União dos anos (2021, 2022, 2023)
-- Identificação de contas contábeis relevantes
-- Uso de `CASE WHEN` para agregação de métricas
+Principais atividades:
 
----
+- Seleção das empresas do setor varejista  
+- Consolidação dos períodos (2021, 2022 e 2023)  
+- Identificação e mapeamento das contas contábeis relevantes  
+- Padronização da estrutura dos dados  
+- Utilização de expressões CASE WHEN para agregação de métricas  
 
-### 3. Consolidação
+Foram criadas views intermediárias:
 
-Os dados tratados foram inseridos em tabelas consolidadas:
-
-- `dre_consolidado`
-- `dfc_consolidado`
-- `bp_consolidado`
-
----
-
-### 4. Integração dos Dados
-
-As três demonstrações financeiras foram integradas:
-
-- DRE → performance
-- DFC → geração de caixa
-- BP → estrutura patrimonial
+- dre_tratado  
+- dfc_tratado  
+- bp_tratado  
 
 ---
 
-### 5. Camada Analítica
+## 5. Consolidação dos Dados
 
-Foi criada uma view final (`analise_final`) contendo indicadores como:
+Após o tratamento, os dados foram organizados em tabelas consolidadas, estruturadas para análise:
 
-- Margem líquida
-- Qualidade do lucro
-- Estrutura de capital
-- Crescimento de receita e lucro
+- dre_consolidado  
+- dfc_consolidado  
+- bp_consolidado  
+
+Essa etapa garante consistência e padronização entre as diferentes demonstrações financeiras.
 
 ---
 
-## Abordagem Analítica
+## 6. Integração das Demonstrações
 
-O projeto foi estruturado em três blocos:
+As três demonstrações financeiras foram integradas para permitir análise conjunta:
+
+- DRE: análise de desempenho (receita e lucro)  
+- DFC: análise de geração de caixa  
+- Balanço Patrimonial: análise de estrutura de capital  
+
+---
+
+## 7. Camada Analítica
+
+Foi criada uma view final (`analise_final`) contendo os principais indicadores financeiros, incluindo:
+
+- Margem líquida  
+- Qualidade do lucro  
+- Estrutura de capital (alavancagem)  
+- Crescimento de receita  
+- Crescimento de lucro  
+
+Essa camada centraliza as informações necessárias para análise e interpretação dos dados.
+
+---
+
+## 8. Abordagem Analítica
+
+A análise foi estruturada em três dimensões principais:
 
 ### Performance
-Avaliação de receita, lucro e crescimento
+Avaliação de receita, lucro e crescimento ao longo do tempo.
 
 ### Qualidade do Resultado
-Comparação entre lucro contábil e geração de caixa
+Comparação entre lucro contábil e geração de caixa, com foco na conversão de resultados em caixa.
 
 ### Estrutura e Risco
-Análise da alavancagem financeira e sustentabilidade
+Análise do nível de endividamento e da sustentabilidade financeira das empresas.
 
 ---
 
-## Objetivo Final
+## 9. Objetivo Analítico
 
-Avaliar se as empresas:
+O projeto busca avaliar se as empresas analisadas:
 
-- Crescem de forma sustentável  
-- Convertem lucro em caixa  
-- Apresentam risco financeiro elevado  
+- Apresentam crescimento consistente ao longo do tempo  
+- Convertem lucro contábil em geração de caixa  
+- Possuem dependência relevante de endividamento  
+- Demonstram sinais de deterioração financeira  
